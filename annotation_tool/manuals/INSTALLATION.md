@@ -15,13 +15,17 @@ The most straightforward way is to utilize our preconfigured conda environment.
     ```
     conda activate annotation-tool-env 
     ```
-7) You should now be able to run the annotation tool. However, there are a few caveats. First, you need to parse the database containing the person records. You can do this using the following command:
+7) Next, cd into the annotation tool directory:
+   ```
+   cd annotation_tool
+   ```
+8) You should now be able to run the annotation tool. However, there are a few caveats. First, you need to parse the database containing the person records. You can do this using the following command:
    ```
    python parser.py <database_name> <output_json_name>
    ```
    **NOTE:** The parsing process can take a long time, especially on larger databases (4+ minutes). </br>Also, ensure that the folder ```<database_name>``` is in the same directory as ```annotation_tool.py```.
 
-8) After successfully parsing the database, you can run the annotation tool as follows:
+9) After successfully parsing the database, you can run the annotation tool as follows:
    ```
    python annotation_tool.py data_json=<parser_output_json>
    ```
@@ -58,13 +62,17 @@ The most straightforward way is to utilize our preconfigured conda environment.
     ```
     conda activate annotation-tool-env 
     ```
-5) Before the first annotation, you need to parse the database containing the person records. To this only once. Use the following command:
+5) Next, cd into the annotation tool directory:
+   ```
+   cd annotation_tool
+   ```
+6) Before the first annotation, you need to parse the database containing the person records. To this only once. Use the following command:
    ```
    python parser.py <database_name> <output_json_name>
    ```
    **NOTE:** The parsing process can take a long time, especially on larger databases (4+ minutes). </br>Also, ensure that the folder ```<database_name>``` is in the same directory as ```annotation_tool.py```.
 
-6) You are now ready to start the annotation tool. Example running script:  
+7) You are now ready to start the annotation tool. Example running script:  
    ```
    python annotation_tool.py data_json=<parser_output_json> webview=webbrowser
    ```
