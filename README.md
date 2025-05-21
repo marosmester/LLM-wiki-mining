@@ -1,4 +1,4 @@
-# LLM-wiki-mining
+# Mining data about people from Wikipedia using LLMs
 This repository is the final output of the team project: <em> Mining data about people from Wikipedia using LLMs </em> which took place during the summer semester of the academic year 2024/2025 at FEE CTU in Prague.
 
 ## Content
