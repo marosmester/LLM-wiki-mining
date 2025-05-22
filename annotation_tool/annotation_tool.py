@@ -1222,13 +1222,14 @@ class AnnotationTool(tb.Window):
         Like nextRecord(), but does not save the annotation neither does it trigger the
         warning pop-up window.
         """
-        if(self.person_sub_index + 1 == len(self.data[self.person_index])):
-            self.person_index += 1
-            self.person_sub_index = 0
-        else:
-            self.person_sub_index += 1
-        
-        self.loadRecord()
+        if self.person_index != len(self.data) - 1:
+            if(self.person_sub_index + 1 == len(self.data[self.person_index])):
+                self.person_index += 1
+                self.person_sub_index = 0
+            else:
+                self.person_sub_index += 1
+            
+            self.loadRecord()
 
     def previousRecord(self) -> None:
         """
