@@ -25,7 +25,7 @@ def find_year_file(fpath, pattern):
     Search any elligible file AS IT WAS A TXT FILE.
     '''
     #print(fpath)
-    with open(fpath, "r") as f:
+    with open(fpath, "r", encoding="utf-8") as f:
         content = f.read()
     match = re.search(pattern, content)
     return match
@@ -87,7 +87,7 @@ def analyze_person(path_to_person, file = None):
     # Get photo year from INFOBOX caption
     infobox = path_to_person / 'infobox_captions.json'
     if os.path.exists(infobox):
-        with open(infobox, "r") as f:
+        with open(infobox, "r", encoding="utf-8") as f:
             jsonData = json.load(f)
         if jsonData == []:
             print("File \"infobox_captions.json\" is empty", file=file)
@@ -100,7 +100,7 @@ def analyze_person(path_to_person, file = None):
     # For every other non-infobox caption, calculate the age
     captions = path_to_person / "captions.json"
     if os.path.exists(captions):
-        with open(captions, "r") as f:
+        with open(captions, "r", encoding="utf-8") as f:
             jsonData = json.load(f)
         if jsonData == []:
             print("File \"captions.json\" is empty", file=file)
@@ -120,7 +120,7 @@ def build_entry_dict(path, bYear, capYear):
     in json file simmilar to the one created by annotation tool.
     """
     ret = dict()
-    ret["path"] = "./" + str(Path(*path.parts[-4:]))
+    ret["path"] = "./" + str(Path(*path.parts[-4:])) if path is not None else None
     ret["person_id"] = None
     ret["fully_anotated"] = False
     ret["birthday_annotated"] = True if bYear is not None else False
@@ -158,10 +158,12 @@ def get_persons_json_annotation(path_to_person):
     else:
         byear = None
 
+    BUILT_DICT = False
+
     # Get photo year from INFOBOX caption
     infobox = path_to_person / 'infobox_captions.json'
     if os.path.exists(infobox):
-        with open(infobox, "r") as f:
+        with open(infobox, "r", encoding="utf-8") as f:
             jsonData = json.load(f)
         if jsonData != []:
             for entry in jsonData:
@@ -170,11 +172,12 @@ def get_persons_json_annotation(path_to_person):
                     p = path_to_person / "title_images" / entry["saved_filename"]
                     json_entry_dict = build_entry_dict( p, byear, year)
                     annotation_data.append( json_entry_dict)
+                    BUILT_DICT = True
         
     # For every other non-infobox caption, calculate the age
     captions = path_to_person / "captions.json"
     if os.path.exists(captions):
-        with open(captions, "r") as f:
+        with open(captions, "r", encoding="utf-8") as f:
             jsonData = json.load(f)
         if jsonData != []:
             for entry in jsonData:
@@ -183,6 +186,13 @@ def get_persons_json_annotation(path_to_person):
                     p = path_to_person / "images" / entry["saved_filename"]
                     json_entry_dict = build_entry_dict( p, byear, year)
                     annotation_data.append( json_entry_dict)
+                    BUILT_DICT = True
+
+    # even if no year in image caption was detected, still build the json if byear is avalaible 
+    if BUILT_DICT == False and byear is not None:
+        json_entry_dict = build_entry_dict(None, byear, None)
+        annotation_data.append( json_entry_dict)
+        BUILT_DICT = True
 
     with open(path_to_person/"regex_annotation.json" , "w", encoding="utf-8") as f:
         json.dump(annotation_data, f, indent=4)
@@ -197,6 +207,7 @@ if __name__ == "__main__":
     #datasetPath = datasetPath / "annotation_tool/example_set"
     # parsedJsonPath = Path(os.getcwd()) / "parsed.json"
     print("Absolute path to dataset drectory provided:", datasetPath)
+    print(f"Resolved path: {datasetPath.resolve()}")
     # print(parsedJsonPath)
 
     # print(f'INFO: Parsing data')
@@ -217,7 +228,7 @@ if __name__ == "__main__":
 
     # fill out output file 
     cnt = 0
-    with open(fname, "a") as file:
+    with open(fname, "a", encoding="utf-8") as file:
         for person in folders:
             #person = Path( entry["path"] ).parts[1]
             print(f"{cnt} Analyzing: {person}")
